@@ -67,7 +67,7 @@ const Navbar = () => {
             </li>
             <li>
               <NavLink
-                to="/about"
+                to="/dashboard"
                 aria-label="About Us"
                 title="About Us"
                 className={({ isActive }) => (isActive ? "active" : "default")}
@@ -85,7 +85,7 @@ const Navbar = () => {
                       </div>
                     </div>
                     <div className="ml-5">
-                      <button onClick={handleSignOut} className="btn">
+                      <button onClick={handleSignOut} className="btn bg-cyan-200">
                         LogOut
                       </button>
                     </div>
@@ -189,7 +189,7 @@ const Navbar = () => {
                       </li>
                       <li>
                         <Link
-                          to="/about"
+                          to="/dashboard"
                           aria-label="About Us"
                           title="About Us"
                           className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
