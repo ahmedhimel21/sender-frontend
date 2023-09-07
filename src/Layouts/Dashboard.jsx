@@ -17,7 +17,8 @@ import { useConsumer } from "../Hooks/useConsumer";
 import { useState } from "react";
 
 const Dashboard = () => {
-  const [isConsumer] = useConsumer();
+  // const [isConsumer] = useConsumer();
+  const [isConsumer,setIsConsumer] = useState(true);
   // const [isAdmin] = useAdmin();
   const [isAdmin,setIsAdmin] = useState(true);
   return (

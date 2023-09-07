@@ -7,6 +7,8 @@ import ErrorPage from "../Pages/ErrorPage/ErrorPage";
 import PrivateRoutes from "./PrivateRoutes";
 import Dashboard from "../Layouts/Dashboard";
 import WelcomePage from "../Components/Dahboard/WelcomePage";
+import ManageUsers from "../Components/Dahboard/ManageUsers";
+import AdminRoutes from "./AdminRoutes";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +31,10 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/dashboard', element: <WelcomePage></WelcomePage>
+      },
+      {
+        path: 'manageUsers', 
+        element: <ManageUsers></ManageUsers>
       }
     ]
   },
