@@ -109,7 +109,7 @@ const Login = () => {
                 <label className="label mt-3">
                   <a href="#" className="">
                     New to Sender?{" "}
-                    <Link to="/signUp" className="text-2xl text-purple-500">
+                    <Link to="/register" className="text-2xl text-purple-500">
                       SignUp
                     </Link>
                   </a>
