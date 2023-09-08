@@ -9,6 +9,7 @@ import Dashboard from "../Layouts/Dashboard";
 import WelcomePage from "../Components/Dahboard/WelcomePage";
 import ManageUsers from "../Components/Dahboard/ManageUsers";
 import AdminRoutes from "./AdminRoutes";
+import SendAMessage from "../Components/Dahboard/SendAMessage";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: 'manageUsers', 
         element: <ManageUsers></ManageUsers>
+      },
+      {
+        path: 'sendAMessage',
+        element: <SendAMessage></SendAMessage>
       }
     ]
   },
