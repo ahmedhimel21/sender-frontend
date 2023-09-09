@@ -3,6 +3,7 @@ import Container from "../Container";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { FaTrashAlt } from "react-icons/fa";
 
 const ManageUsers = () => {
   const [axiosSecure] = useAxiosSecure();
@@ -77,6 +78,7 @@ const ManageUsers = () => {
               <th className="px-4 py-2">Name</th>
               <th className="px-4 py-2">Role</th>
               <th className="px-4 py-2">Actions</th>
+              <th className="px-4 py-2">Remove</th>
             </tr>
           </thead>
           <tbody>
@@ -96,22 +98,23 @@ const ManageUsers = () => {
                     <button
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-2 rounded"
                       onClick={() => makeConsumer(user)}
-                      disabled={
-                        user.role == "admin" || user.role == "consumer"
-                      }
+                      disabled={user.role == "admin" || user.role == "consumer"}
                     >
                       Make Consumer
                     </button>
                     <button
                       className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
                       onClick={() => makeAdmin(user)}
-                      disabled={
-                        user.role == "admin" || user.role == "consumer"
-                      }
+                      disabled={user.role == "admin" || user.role == "consumer"}
                     >
                       Make Admin
                     </button>
                   </>
+                </td>
+                <td className="border px-4 py-2">
+                  <button>
+                    <FaTrashAlt className="text-red-700"></FaTrashAlt>
+                  </button>
                 </td>
               </tr>
             ))}

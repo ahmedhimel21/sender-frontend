@@ -28,6 +28,7 @@ const SendAMessage = () => {
       if (response.ok) {
         const data = await response.json();
         setResponse(data.message);
+        form.reset();
       } else {
         throw new Error("Failed to send SMS");
       }
@@ -38,12 +39,12 @@ const SendAMessage = () => {
   };
   return (
     <>
-      <div className="max-w-md mx-auto mt-10 p-4 bg-gray-100 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-semibold mb-4">Send SMS</h2>
+      <div className="w-3/4 mx-auto mt-10 p-4 bg-gray-100 rounded-lg shadow-lg">
+        <h2 className="text-2xl font-semibold mb-4 text-purple-700">Send SMS</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-700 font-semibold">
-              Recipient:
+            <label className="block text-purple-700 font-semibold">
+              Recipient
             </label>
             <input
               type="text"
@@ -53,8 +54,8 @@ const SendAMessage = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 font-semibold">
-              Message:
+            <label className="block text-purple-700 font-semibold">
+              Message
             </label>
             <textarea
               value={message}

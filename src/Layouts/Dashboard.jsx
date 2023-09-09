@@ -5,8 +5,8 @@ import {
   FaHome,
   FaRegCheckCircle,
   FaUserPlus,
-  FaWallet,
-  FaFacebookMessenger
+  FaFacebookMessenger,
+  FaHistory,
 } from "react-icons/fa";
 import { useConsumer } from "../Hooks/useConsumer";
 
@@ -16,7 +16,7 @@ const Dashboard = () => {
   return (
     <>
       <NavigationBar></NavigationBar>
-      <div className="drawer lg:drawer-open mt-8">
+      <div className="drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col items-center justify-center ">
           <Outlet></Outlet>
@@ -31,12 +31,18 @@ const Dashboard = () => {
           <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
           <ul className="menu p-4 w-80 h-full bg-purple-500 text-xl text-white">
             <div>
-              <h1 className="text-center pb-10 text-3xl font-bold">
-                Sender
-              </h1>
+              <h1 className="text-center pb-10 text-3xl font-bold">Sender</h1>
             </div>
             {isAdmin ? (
               <>
+                <li>
+                  <NavLink
+                    to="/dashboard/manageUsers"
+                    className={({ isActive }) => (isActive ? "text-white" : "")}
+                  >
+                    <FaUserPlus></FaUserPlus> Manage Users
+                  </NavLink>
+                </li>
                 <li>
                   <NavLink
                     to="/dashboard/sendAMessage"
@@ -47,10 +53,10 @@ const Dashboard = () => {
                 </li>
                 <li>
                   <NavLink
-                    to="/dashboard/manageUsers"
+                    to="/dashboard/messageHistory"
                     className={({ isActive }) => (isActive ? "text-white" : "")}
                   >
-                    <FaUserPlus></FaUserPlus> Manage Users
+                    <FaHistory></FaHistory> Message History
                   </NavLink>
                 </li>
               </>
@@ -58,7 +64,7 @@ const Dashboard = () => {
               <>
                 <li>
                   <NavLink
-                    to="/dashboard/addClass"
+                    to="/dashboard/sendConsumerMessage"
                     className={({ isActive }) => (isActive ? "text-white" : "")}
                   >
                     <FaFacebookMessenger></FaFacebookMessenger> Send Message
