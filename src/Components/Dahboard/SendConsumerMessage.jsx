@@ -42,7 +42,6 @@ const SendConsumerMessage = () => {
       console.error(error);
       setResponse("Error sending SMS");
     }
-    console.log(recipient, message, userId);
   };
 
   const [axiosSecure] = useAxiosSecure();
@@ -61,7 +60,6 @@ const SendConsumerMessage = () => {
         console.error("Error fetching message history:", error)
       );
   }, []);
-  console.log(credits);
   return (
     <>
       <div className="bg-gray-100 flex flex-col items-center justify-center">

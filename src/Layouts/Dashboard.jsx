@@ -7,7 +7,7 @@ import {
   FaUserPlus,
   FaFacebookMessenger,
 } from "react-icons/fa";
-import { useConsumer } from "../Hooks/useConsumer";
+import { useConsumer } from "../hooks/useConsumer";
 
 const Dashboard = () => {
   const [isConsumer] = useConsumer();

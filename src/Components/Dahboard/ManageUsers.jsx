@@ -6,7 +6,8 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { FaRegCreditCard } from "react-icons/fa";
 
 const ManageUsers = () => {
-  const [credits,setCredits] = useState('');
+  const [credits, setCredits] = useState("");
+  const [userId,setUserId] = useState("");
   const [axiosSecure] = useAxiosSecure();
   const { data: users = [], refetch } = useQuery(["users"], async () => {
     const res = await axiosSecure.get("/users");
@@ -14,7 +15,6 @@ const ManageUsers = () => {
   });
 
   const makeConsumer = (user) => {
-    console.log(user);
     const userData = {
       name: user?.name,
       email: user?.email,
@@ -48,7 +48,6 @@ const ManageUsers = () => {
   };
 
   const makeAdmin = (user) => {
-    console.log(user._id);
     fetch(`http://localhost:5000/users/admin/${user?._id}`, {
       method: "PATCH",
     })
@@ -71,8 +70,35 @@ const ManageUsers = () => {
       .then((response) => response.json())
       .then((data) => {
         data.map((credits) => setCredits(credits.smsCredits));
-      })
+      });
   }, [credits]);
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/smsCredits/${userId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        data.map((credits) => setCredits(credits.smsCredits));
+      });
+  }, [credits]);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/consumer")
+      .then((response) => response.json())
+      .then((data) => {
+        data.map((user) => setUserId(user._id));
+      })
+      .catch((error) =>
+        console.error("Error fetching message history:", error)
+      );
+  }, []);
+
+  const handleSmsCredits = (id) => {
+    fetch(`http://localhost:5000/smsCreditGrant/${id}`, {
+      method: "PATCH",
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  };
   return (
     <Container>
       <div className="mx-auto w-full">
@@ -118,8 +144,11 @@ const ManageUsers = () => {
                   </>
                 </td>
                 <td className="border px-4 py-2">
-                  <button disabled={user.role == "admin" || credits<=49}>
-                    <FaRegCreditCard  className="text-red-700"></FaRegCreditCard >
+                  <button
+                    onClick={() => handleSmsCredits(userId)}
+                    disabled={user.role == "admin" || credits <= 49}
+                  >
+                    <FaRegCreditCard className="text-red-700"></FaRegCreditCard>
                   </button>
                 </td>
               </tr>

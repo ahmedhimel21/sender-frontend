@@ -35,7 +35,6 @@ const SendAMessage = () => {
       console.error(error);
       setResponse("Error sending SMS");
     }
-    console.log(recipient,message)
   };
   return (
     <>
