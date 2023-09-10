@@ -6,7 +6,6 @@ import {
   FaRegCheckCircle,
   FaUserPlus,
   FaFacebookMessenger,
-  FaHistory,
 } from "react-icons/fa";
 import { useConsumer } from "../Hooks/useConsumer";
 
@@ -49,14 +48,6 @@ const Dashboard = () => {
                     className={({ isActive }) => (isActive ? "text-white" : "")}
                   >
                     <FaFacebookMessenger></FaFacebookMessenger> Send A Message
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="/dashboard/messageHistory"
-                    className={({ isActive }) => (isActive ? "text-white" : "")}
-                  >
-                    <FaHistory></FaHistory> Message History
                   </NavLink>
                 </li>
               </>

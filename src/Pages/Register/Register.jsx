@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import Lottie from "lottie-react";
 import signUpAnimation from "../../../public/signUp.json";
-import rocketAnimation from "../../../public/rocket.json";
 import { FaGoogle } from "react-icons/fa";
 import { AuthContext } from "../../Provider/Authproviders";
 import { Link, useNavigate } from "react-router-dom";
@@ -20,7 +19,7 @@ const Register = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm(); 
   const onSubmit = (data, e) => {
     const name = data.name;
     const email = data.email;

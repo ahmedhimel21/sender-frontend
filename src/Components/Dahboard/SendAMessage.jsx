@@ -1,20 +1,19 @@
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 
 const SendAMessage = () => {
-  const [recipient, setRecipient] = useState("");
-  const [message, setMessage] = useState("");
   const [response, setResponse] = useState("");
 
-  const handleRecipientChange = (e) => {
-    setRecipient(e.target.value);
-  };
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
 
-  const handleMessageChange = (e) => {
-    setMessage(e.target.value);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit  = async (data) => {
+   const recipient = data.recipient;
+   const message = data.message;
 
     try {
       const response = await fetch("http://localhost:5000/api/send-sms", {
@@ -28,7 +27,7 @@ const SendAMessage = () => {
       if (response.ok) {
         const data = await response.json();
         setResponse(data.message);
-        form.reset();
+        reset();
       } else {
         throw new Error("Failed to send SMS");
       }
@@ -36,39 +35,40 @@ const SendAMessage = () => {
       console.error(error);
       setResponse("Error sending SMS");
     }
+    console.log(recipient,message)
   };
   return (
     <>
       <div className="w-3/4 mx-auto mt-10 p-4 bg-gray-100 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-semibold mb-4 text-purple-700">Send SMS</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-purple-700 font-semibold">
-              Recipient
+        <h2 className="text-2xl font-semibold mb-4 text-purple-700">
+          Send SMS
+        </h2>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="form-control mb-4">
+            <label className="label">
+              <span className="label-text">Recipient</span>
             </label>
             <input
               type="text"
-              value={recipient}
-              onChange={handleRecipientChange}
+              placeholder="Enter phone Number"
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+              {...register("recipient", { required: true })}
             />
           </div>
-          <div className="mb-4">
-            <label className="block text-purple-700 font-semibold">
-              Message
+          <div className="form-control mb-4">
+            <label className="label">
+              <span className="label-text">Message</span>
             </label>
             <textarea
-              value={message}
-              onChange={handleMessageChange}
+              type="text"
+              placeholder="Message"
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-            ></textarea>
+              {...register("message", { required: true })}
+            />
           </div>
-          <button
-            type="submit"
-            className="bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300"
-          >
-            Send SMS
-          </button>
+          <div className="form-control mt-6">
+            <input type="submit" value="Send" className="btn btn-primary" />
+          </div>
         </form>
         {response && <p className="mt-4 text-red-500">{response}</p>}
       </div>

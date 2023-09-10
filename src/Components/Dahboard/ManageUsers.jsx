@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "../Container";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaRegCreditCard } from "react-icons/fa";
 
 const ManageUsers = () => {
+  const [credits,setCredits] = useState('');
   const [axiosSecure] = useAxiosSecure();
   const { data: users = [], refetch } = useQuery(["users"], async () => {
     const res = await axiosSecure.get("/users");
     return res.data;
   });
-  console.log(users);
 
   const makeConsumer = (user) => {
     console.log(user);
@@ -66,7 +66,13 @@ const ManageUsers = () => {
         }
       });
   };
-
+  useEffect(() => {
+    fetch("http://localhost:5000/consumerCredits")
+      .then((response) => response.json())
+      .then((data) => {
+        data.map((credits) => setCredits(credits.smsCredits));
+      })
+  }, [credits]);
   return (
     <Container>
       <div className="mx-auto w-full">
@@ -78,7 +84,7 @@ const ManageUsers = () => {
               <th className="px-4 py-2">Name</th>
               <th className="px-4 py-2">Role</th>
               <th className="px-4 py-2">Actions</th>
-              <th className="px-4 py-2">Remove</th>
+              <th className="px-4 py-2">Reset Credits</th>
             </tr>
           </thead>
           <tbody>
@@ -112,8 +118,8 @@ const ManageUsers = () => {
                   </>
                 </td>
                 <td className="border px-4 py-2">
-                  <button>
-                    <FaTrashAlt className="text-red-700"></FaTrashAlt>
+                  <button disabled={user.role == "admin" || credits<=49}>
+                    <FaRegCreditCard  className="text-red-700"></FaRegCreditCard >
                   </button>
                 </td>
               </tr>

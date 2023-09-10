@@ -1,36 +1,40 @@
 import React, { useEffect, useState } from "react";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 
 const SendConsumerMessage = () => {
-  const [smsCredits, setSmsCredits] = useState(0);
-  const [recipient, setRecipient] = useState("");
-  const [message, setMessage] = useState("");
   const [response, setResponse] = useState("");
   const [userId, setUserId] = useState("");
 
-  const handleRecipientChange = (e) => {
-    setRecipient(e.target.value);
-  };
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
 
-  const handleMessageChange = (e) => {
-    setMessage(e.target.value);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
+    const recipient = data.recipient;
+    const message = data.message;
 
     try {
-      const response = await fetch("http://localhost:5000/api/consumer/send-sms", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ recipient, message, userId }),
-      });
+      const response = await fetch(
+        "http://localhost:5000/api/consumer/send-sms",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ recipient, message, userId }),
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
         setResponse(data.message);
-        form.reset();
+        refetch();
+        reset();
       } else {
         throw new Error("Failed to send SMS");
       }
@@ -41,55 +45,11 @@ const SendConsumerMessage = () => {
     console.log(recipient, message, userId);
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     const response = await fetch(
-  //       "http://localhost:5000/api/consumer/send-sms",
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({ recipient, message, userId }),
-  //       }
-  //     );
-
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       console.log("SMS sent successfully:", response.data.message);
-  //       setRemainingSmsCredits(remainingSmsCredits - 1);
-  //       setResponse(data.message);
-  //       form.reset();
-  //     } else {
-  //       throw new Error("Failed to send SMS");
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     setResponse("Error sending SMS");
-  //   }
-  // };
-
-  useEffect(() => {
-    // Fetch remaining SMS credits for the current user (consumer)
-    // axios
-    //   .get(`/api/consumer/${userId}/remaining-sms-credits`)
-    //   .then((response) => {
-    //     setRemainingSmsCredits(response.data.remainingSmsCredits);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error fetching remaining SMS credits:", error);
-    //   });
-    fetch(`/api/consumer/${userId}/remaining-sms-credits`)
-      .then((response) => response.json())
-      .then((data) => {
-        setSmsCredits(data.remainingSmsCredits);
-      })
-      .catch((error) =>
-        console.error("Error fetching message history:", error)
-      );
-  }, []);
+  const [axiosSecure] = useAxiosSecure();
+  const { data: credits = [], refetch } = useQuery(["credits"], async () => {
+    const res = await axiosSecure.get(`/smsCredits/${userId}`);
+    return res.data;
+  });
 
   useEffect(() => {
     fetch("http://localhost:5000/consumer")
@@ -101,40 +61,44 @@ const SendConsumerMessage = () => {
         console.error("Error fetching message history:", error)
       );
   }, []);
+  console.log(credits);
   return (
     <>
       <div className="bg-gray-100 flex flex-col items-center justify-center">
         <div className="bg-white shadow-md rounded-lg p-6">
           <h2 className="text-xl font-semibold mb-4">Consumer Dashboard</h2>
-          <p className="mb-4">Sent SMS: {smsCredits}</p>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label className="block text-purple-700 font-semibold">
-                Recipient
+          <p className="mb-4">Sent SMS: {credits.smsCredits}</p>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="form-control mb-4">
+              <label className="label">
+                <span className="label-text">Recipient</span>
               </label>
               <input
                 type="text"
-                value={recipient}
-                onChange={handleRecipientChange}
+                placeholder="Enter phone Number"
                 className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                {...register("recipient", { required: true })}
               />
             </div>
-            <div className="mb-4">
-              <label className="block text-purple-700 font-semibold">
-                Message
+            <div className="form-control mb-4">
+              <label className="label">
+                <span className="label-text">Message</span>
               </label>
               <textarea
-                value={message}
-                onChange={handleMessageChange}
+                type="text"
+                placeholder="Message"
                 className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-              ></textarea>
+                {...register("message", { required: true })}
+              />
             </div>
-            <button
-              type="submit"
-              className="bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300"
-            >
-              Send SMS
-            </button>
+            <div className="form-control mt-6">
+              <input
+                type="submit"
+                value="Send"
+                className="btn btn-primary"
+                disabled={credits.smsCredits === 50}
+              />
+            </div>
           </form>
           {response && <p className="mt-4 text-red-500">{response}</p>}
         </div>

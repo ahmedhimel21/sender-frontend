@@ -10,7 +10,6 @@ import WelcomePage from "../Components/Dahboard/WelcomePage";
 import ManageUsers from "../Components/Dahboard/ManageUsers";
 import AdminRoutes from "./AdminRoutes";
 import SendAMessage from "../Components/Dahboard/SendAMessage";
-import MessageHistory from "../Components/Dahboard/MessageHistory";
 import SendConsumerMessage from "../Components/Dahboard/sendConsumerMessage";
 
 const router = createBrowserRouter([
@@ -37,15 +36,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'manageUsers', 
-        element: <ManageUsers></ManageUsers>
+        element: <AdminRoutes><ManageUsers></ManageUsers></AdminRoutes>
       },
       {
         path: 'sendAMessage',
-        element: <SendAMessage></SendAMessage>
-      },
-      {
-        path: 'messageHistory',
-        element: <MessageHistory></MessageHistory>
+        element: <AdminRoutes><SendAMessage></SendAMessage></AdminRoutes>
       },
       {
         path: 'sendConsumerMessage',
